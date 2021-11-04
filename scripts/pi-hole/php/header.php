@@ -83,6 +83,11 @@
         $nproc = count($matches[0]);
     }
 
+    $charge = rtrim(file_get_contents('/sys/class/power_supply/battery/capacity'));
+    $status = rtrim(file_get_contents('/sys/class/power_supply/battery/status'));
+    $health = rtrim(file_get_contents('/sys/class/power_supply/battery/health'));
+    $temp = rtrim(file_get_contents('/sys/class/power_supply/battery/temp'));
+    $temp = intval($temp) / 10;
     // Get memory usage
     $data = explode("\n", file_get_contents("/proc/meminfo"));
     $meminfo = array();
@@ -324,7 +329,7 @@ if($auth) {
                 <div class="pull-left image">
                     <img src="img/logo.svg" alt="Pi-hole logo" width="45" height="67" style="height: 67px;">
                 </div>
-                <div class="pull-left info">
+                <div class="pull-left info" style="position: static">
                     <p>Status</p>
                         <?php
                         $pistatus = pihole_execute('status web');
@@ -393,6 +398,30 @@ if($auth) {
                         {
                             echo "\"></i> Memory usage:&nbsp;&nbsp; N/A</span>";
                         }
+                    ?>
+		<br/>
+                    <?php
+                    echo "<span><i class=\"fa fa-circle ";
+                        if ($memory_usage > 0.75 || $memory_usage < 0.0) {
+                            echo "text-red";
+                        }
+                        else
+                        {
+                            echo "text-green-light";
+                        }
+                        echo "\"></i> Battery:&nbsp;&nbsp;".$charge."% ".$status."</span>";
+                    ?>
+		<br/>
+		    <?php
+                    echo "<span><i class=\"fa fa-circle ";
+                        if ($memory_usage > 0.75 || $memory_usage < 0.0) {
+                            echo "text-red";
+                        }
+                        else
+                        {
+                            echo "text-green-light";
+                        }
+                        echo "\"></i> Bat. Temp:&nbsp;&nbsp;".$temp."C ( ".$health.")</span>";
                     ?>
                 </div>
             </div>
