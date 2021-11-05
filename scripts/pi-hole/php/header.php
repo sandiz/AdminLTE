@@ -402,19 +402,21 @@ if($auth) {
 		<br/>
                     <?php
                     echo "<span><i class=\"fa fa-circle ";
-                        if ($memory_usage > 0.75 || $memory_usage < 0.0) {
-                            echo "text-red";
-                        }
-                        else
-                        {
+			if (intval($charge) > 50) {
                             echo "text-green-light";
-                        }
+			}
+			else if (intval($charge) > 20) {
+                            echo "text-yellow";
+			}
+			else {
+                            echo "text-red";
+			}
                         echo "\"></i> Battery:&nbsp;&nbsp;".$charge."% ".$status."</span>";
                     ?>
 		<br/>
 		    <?php
                     echo "<span><i class=\"fa fa-circle ";
-                        if ($memory_usage > 0.75 || $memory_usage < 0.0) {
+                        if (intval($temp) > 50) {
                             echo "text-red";
                         }
                         else
